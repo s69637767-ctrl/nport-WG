@@ -1,40 +1,69 @@
-# Android GUI for [WireGuard](https://www.wireguard.com/)
+# n!port WG
 
-**[Download from the Play Store](https://play.google.com/store/apps/details?id=com.wireguard.android)**
+**Modern VPN client with WARP & VLESS support for Android & Windows**
 
-This is an Android GUI for [WireGuard](https://www.wireguard.com/). It [opportunistically uses the kernel implementation](https://git.zx2c4.com/android_kernel_wireguard/about/), and falls back to using the non-root [userspace implementation](https://git.zx2c4.com/wireguard-go/about/).
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-## Building
+## 🚀 Features
 
-```
-$ git clone --recurse-submodules https://git.zx2c4.com/wireguard-android
-$ cd wireguard-android
+- **WireGuard Protocol** — Fast, modern VPN protocol
+- **Cloudflare WARP** — Generate and manage WARP configurations with country selection
+- **VLESS Support** — Advanced proxy protocol support
+- **Modern UI** — Clean, intuitive interface inspired by Happ
+- **Traffic Statistics** — Monitor download/upload usage
+- **Subscription Management** — Auto-update configurations
+- **Cross-platform** — Android now, Windows coming soon
+
+## 📱 Android Version
+
+### Building
+
+```bash
+$ git clone --recurse-submodules https://github.com/s69637767-ctrl/nport-WG.git
+$ cd nport-WG
 $ ./gradlew assembleRelease
 ```
 
-macOS users may need [flock(1)](https://github.com/discoteq/flock).
+### Requirements
 
-## Embedding
+- Android SDK 24+ (Android 7.0+)
+- Java 17
+- Gradle 8.x
 
-The tunnel library is [on Maven Central](https://search.maven.org/artifact/com.wireguard.android/tunnel), alongside [extensive class library documentation](https://javadoc.io/doc/com.wireguard.android/tunnel).
+## 🎨 Color Scheme
 
-```
-implementation 'com.wireguard.android:tunnel:$wireguardTunnelVersion'
-```
+Primary: `#00A287`  
+Secondary: `#1E796A`  
+Accent: `#006957`  
+Highlight: `#34D0B6`
 
-The library makes use of Java 8 features, so be sure to support those in your gradle configuration with [desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring):
+## 🛠️ Roadmap
 
-```
-compileOptions {
-    sourceCompatibility JavaVersion.VERSION_17
-    targetCompatibility JavaVersion.VERSION_17
-    coreLibraryDesugaringEnabled = true
-}
-dependencies {
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.3"
-}
-```
+### Phase 1: Android (Current)
+- [x] Fork wireguard-android
+- [ ] Rebranding to n!port WG
+- [ ] Modern UI redesign
+- [ ] WARP configuration generator
+- [ ] VLESS protocol integration
+- [ ] Traffic statistics
+- [ ] Subscription management
 
-## Translating
+### Phase 2: Windows
+- [ ] WinUI 3 application
+- [ ] wireguard-go integration
+- [ ] Shared core functionality
 
-Please help us translate the app into several languages on [our translation platform](https://crowdin.com/project/WireGuard).
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+Based on [WireGuard Android](https://github.com/WireGuard/wireguard-android)
+
+## 🙏 Credits
+
+- WireGuard project
+- Original wireguard-android contributors
+
+---
+
+**n!port WG** — Fast, secure, modern VPN client
