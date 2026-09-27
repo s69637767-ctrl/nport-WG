@@ -13,6 +13,7 @@ androidx-core-ktx = "androidx.core:core-ktx:1.18.0"
 androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.2.1"
 androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.8.9"
 androidx-lifecycle-runtime-ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.10.0"
+androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0"
 androidx-preference-ktx = "androidx.preference:preference-ktx:1.2.1"
 desugarJdkLibs = "com.android.tools:desugar_jdk_libs:2.1.5"
 google-material = "com.google.android.material:material:1.13.0"
@@ -20,6 +21,13 @@ jsr305 = "com.google.code.findbugs:jsr305:3.0.2"
 junit = "junit:junit:4.13.2"
 kotlinx-coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"
 zxing-android-embedded = "com.journeyapps:zxing-android-embedded:4.3.0"
+
+# Network & Crypto for WARP
+okhttp = "com.squareup.okhttp3:okhttp:4.12.0"
+retrofit = "com.squareup.retrofit2:retrofit:2.11.0"
+retrofit-converter-gson = "com.squareup.retrofit2:converter-gson:2.11.0"
+gson = "com.google.code.gson:gson:2.11.0"
+bouncycastle = "org.bouncycastle:bcprov-jdk18on:1.79"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
