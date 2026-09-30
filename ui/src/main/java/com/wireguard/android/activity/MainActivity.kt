@@ -21,6 +21,7 @@ import com.wireguard.android.fragment.TunnelDetailFragment
 import com.wireguard.android.fragment.TunnelEditorFragment
 import com.wireguard.android.model.ObservableTunnel
 import com.nport.wg.warp.WarpGeneratorDialogFragment
+import com.nport.wg.vless.VlessImportDialogFragment
 
 /**
  * CRUD interface for WireGuard tunnels. This activity serves as the main entry point to the
@@ -94,6 +95,12 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
             R.id.menu_warp_generator -> {
                 val dialog = WarpGeneratorDialogFragment()
                 dialog.show(supportFragmentManager, "WarpGeneratorDialog")
+                true
+            }
+            
+            R.id.menu_vless_import -> {
+                val dialog = VlessImportDialogFragment()
+                dialog.show(supportFragmentManager, "VlessImportDialog")
                 true
             }
             

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Import VLESS Configuration"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/md_theme_dark_primary"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Import from URI, QR code, or subscription"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/md_theme_dark_onSurfaceVariant"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Tab Layout -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="URI/QR"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subscription"/>
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <!-- URI/QR Import -->
+        <LinearLayout
+            android:id="@+id/uriImportLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <EditText
+                android:id="@+id/uriInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="vless://..."
+                android:inputType="textUri"
+                android:layout_marginBottom="12dp"/>
+
+            <Button
+                android:id="@+id/scanQrButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Scan QR Code"
+                android:textAllCaps="false"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_marginBottom="12dp"/>
+
+            <Button
+                android:id="@+id/importUriButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Import from URI"
+                android:textAllCaps="false"
+                style="@style/Widget.Material3.Button.ElevatedButton"/>
+
+        </LinearLayout>
+
+        <!-- Subscription Import -->
+        <LinearLayout
+            android:id="@+id/subscriptionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/subscriptionUrlInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="https://example.com/sub"
+                android:inputType="textUri"
+                android:layout_marginBottom="12dp"/>
+
+            <Button
+                android:id="@+id/importSubscriptionButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Import Subscription"
+                android:textAllCaps="false"
+                style="@style/Widget.Material3.Button.ElevatedButton"/>
+
+        </LinearLayout>
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="24dp"/>
+
+        <!-- Status Text -->
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/md_theme_dark_onSurfaceVariant"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
