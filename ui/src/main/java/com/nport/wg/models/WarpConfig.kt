@@ -1,12 +1,8 @@
 package com.nport.wg.models
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
 /**
  * Data model for Cloudflare WARP configuration
  */
-@Parcelize
 data class WarpConfig(
     val privateKey: String,
     val publicKey: String,
@@ -15,7 +11,7 @@ data class WarpConfig(
     val reserved: List<Int>,
     val mtu: Int = 1280,
     val location: WarpLocation? = null
-) : Parcelable {
+) {
 
     /**
      * Convert WARP config to WireGuard format
@@ -40,14 +36,13 @@ data class WarpConfig(
 /**
  * WARP location data
  */
-@Parcelize
 data class WarpLocation(
     val country: String,
     val city: String,
     val code: String,
     val latitude: Double = 0.0,
     val longitude: Double = 0.0
-) : Parcelable
+)
 
 /**
  * WARP account registration data

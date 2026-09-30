@@ -1,13 +1,9 @@
 package com.nport.wg.vless
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
 /**
  * VLESS configuration model
  * Supports VLESS protocol with XTLS, Reality, and WebSocket transport
  */
-@Parcelize
 data class VlessConfig(
     val uuid: String,
     val server: String,
@@ -28,7 +24,7 @@ data class VlessConfig(
     // Name and remarks
     val name: String = "",
     val remarks: String = ""
-) : Parcelable {
+) {
 
     /**
      * Parse VLESS URI: vless://uuid@server:port?params#name

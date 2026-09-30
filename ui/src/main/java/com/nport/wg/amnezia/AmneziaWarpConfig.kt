@@ -1,26 +1,22 @@
 package com.nport.wg.amnezia
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
 /**
  * AmneziaWG configuration model
  * AmneziaWG is a modified WireGuard with obfuscation for bypassing DPI
- * 
+ *
  * Key differences from standard WireGuard:
  * - Packet size randomization
  * - Header obfuscation
  * - Magic number customization
  * - Improved resistance to DPI detection
  */
-@Parcelize
 data class AmneziaWarpConfig(
     // Standard WireGuard fields
     val privateKey: String,
     val publicKey: String,
     val endpoint: String,
     val clientIp: String,
-    
+
     // AmneziaWG specific obfuscation parameters
     val Jc: Int = 3,              // Junk packet count
     val Jmin: Int = 50,           // Minimum junk packet size
@@ -31,12 +27,12 @@ data class AmneziaWarpConfig(
     val H2: Long = 1455708525,    // Magic number 2
     val H3: Long = 1923390209,    // Magic number 3
     val H4: Long = 324057139,     // Magic number 4
-    
+
     // WARP specific
     val reserved: List<Int> = emptyList(),
     val mtu: Int = 1280,
     val location: AmneziaWarpLocation? = null
-) : Parcelable {
+) {
 
     /**
      * Convert to AmneziaWG config format
@@ -89,7 +85,6 @@ data class AmneziaWarpConfig(
 /**
  * Amnezia WARP location data
  */
-@Parcelize
 data class AmneziaWarpLocation(
     val country: String,
     val city: String,
@@ -97,7 +92,7 @@ data class AmneziaWarpLocation(
     val endpoint: String,
     val latitude: Double = 0.0,
     val longitude: Double = 0.0
-) : Parcelable
+)
 
 /**
  * AmneziaWG obfuscation presets
