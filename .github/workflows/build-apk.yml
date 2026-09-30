@@ -28,6 +28,8 @@ jobs:
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v4
+      with:
+        packages: ''
 
     - name: Create local.properties
       run: echo "sdk.dir=$ANDROID_HOME" > local.properties
