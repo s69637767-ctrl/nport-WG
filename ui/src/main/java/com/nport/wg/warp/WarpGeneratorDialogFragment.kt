@@ -1,6 +1,9 @@
 package com.nport.wg.warp
 
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.wireguard.android.R
 import com.wireguard.android.databinding.WarpGeneratorDialogBinding
-import com.nport.wg.models.WarpLocation
+import com.nport.wg.amnezia.AmneziaWarpLocation
+import com.nport.wg.amnezia.ObfuscationLevel
 import kotlinx.coroutines.launch
 
 class WarpGeneratorDialogFragment : DialogFragment() {
@@ -22,11 +26,12 @@ class WarpGeneratorDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
     
     private val viewModel: WarpGeneratorViewModel by viewModels()
-    private var selectedLocation: WarpLocation? = null
+    private var selectedLocation: AmneziaWarpLocation? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = WarpGeneratorDialogBinding.inflate(LayoutInflater.from(requireContext()))
         
+        setupObfuscationRadioGroup()
         setupLocationSpinner()
         setupGenerateButton()
         observeState()
@@ -36,6 +41,18 @@ class WarpGeneratorDialogFragment : DialogFragment() {
             .create()
     }
 
+    private fun setupObfuscationRadioGroup() {
+        binding.obfuscationGroup.setOnCheckedChangeListener { _, checkedId ->
+            val level = when (checkedId) {
+                R.id.radioLow -> ObfuscationLevel.LOW
+                R.id.radioMedium -> ObfuscationLevel.MEDIUM
+                R.id.radioHigh -> ObfuscationLevel.HIGH
+                else -> ObfuscationLevel.MEDIUM
+            }
+            viewModel.setObfuscationLevel(level)
+        }
+    }
+
     private fun setupLocationSpinner() {
         lifecycleScope.launch {
             viewModel.locations.collect { locations ->
@@ -43,7 +60,7 @@ class WarpGeneratorDialogFragment : DialogFragment() {
                     val adapter = ArrayAdapter(
                         requireContext(),
                         android.R.layout.simple_spinner_item,
-                        listOf("Auto (Random)") + locations.map { "${it.country} - ${it.city}" }
+                        listOf("Auto (Nearest)") + locations.map { "${it.country} - ${it.city}" }
                     )
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     binding.locationSpinner.adapter = adapter
@@ -68,20 +85,32 @@ class WarpGeneratorDialogFragment : DialogFragment() {
                 when (state) {
                     is WarpUiState.Idle -> {
                         binding.progressBar.visibility = View.GONE
+                        binding.statusText.visibility = View.GONE
                         binding.generateButton.isEnabled = true
                     }
                     is WarpUiState.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
+                        binding.statusText.visibility = View.VISIBLE
+                        binding.statusText.text = "Generating Amnezia WARP configuration..."
                         binding.generateButton.isEnabled = false
                     }
                     is WarpUiState.Success -> {
                         binding.progressBar.visibility = View.GONE
                         binding.generateButton.isEnabled = true
-                        showSuccessDialog(state.config.toWireGuardConfig())
-                        dismiss()
+                        
+                        val config = state.config.toAmneziaConfig()
+                        copyToClipboard(config)
+                        
+                        showSuccessDialog(
+                            config = config,
+                            obfuscationLevel = state.obfuscationTest.level,
+                            canBypassDPI = state.obfuscationTest.canBypassDPI,
+                            recommendation = state.obfuscationTest.recommendation
+                        )
                     }
                     is WarpUiState.Error -> {
                         binding.progressBar.visibility = View.GONE
+                        binding.statusText.visibility = View.GONE
                         binding.generateButton.isEnabled = true
                         Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
                     }
@@ -90,12 +119,45 @@ class WarpGeneratorDialogFragment : DialogFragment() {
         }
     }
 
-    private fun showSuccessDialog(config: String) {
+    private fun copyToClipboard(text: String) {
+        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Amnezia WARP Config", text)
+        clipboard.setPrimaryClip(clip)
+    }
+
+    private fun showSuccessDialog(
+        config: String,
+        obfuscationLevel: ObfuscationLevel,
+        canBypassDPI: Boolean,
+        recommendation: String
+    ) {
+        val levelEmoji = when (obfuscationLevel) {
+            ObfuscationLevel.HIGH -> "🟢"
+            ObfuscationLevel.MEDIUM -> "🟡"
+            ObfuscationLevel.LOW -> "🟠"
+            ObfuscationLevel.NONE -> "🔴"
+        }
+        
+        val message = """
+            $levelEmoji Obfuscation: ${obfuscationLevel.name}
+            
+            DPI Bypass: ${if (canBypassDPI) "✅ Yes" else "❌ No"}
+            
+            $recommendation
+            
+            Configuration copied to clipboard.
+            Create a new tunnel and paste the config.
+        """.trimIndent()
+
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("WARP Config Generated")
-            .setMessage("Configuration copied to clipboard. Create a new tunnel and paste the config.")
+            .setTitle("Amnezia WARP Generated")
+            .setMessage(message)
             .setPositiveButton("OK") { dialog, _ ->
                 dialog.dismiss()
+            }
+            .setNeutralButton("Copy Again") { _, _ ->
+                copyToClipboard(config)
+                Toast.makeText(requireContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show()
             }
             .show()
     }

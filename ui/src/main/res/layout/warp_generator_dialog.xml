@@ -14,23 +14,68 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Generate WARP Configuration"
+            android:text="Generate Amnezia WARP"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textColor="@color/md_theme_dark_primary"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create a new Cloudflare WARP configuration for WireGuard"
+            android:text="Obfuscated WireGuard for bypassing DPI blocks"
             android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/md_theme_dark_onSurfaceVariant"
             android:layout_marginBottom="24dp"/>
 
+        <!-- Obfuscation Level -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Obfuscation Level"
+            android:textAppearance="?attr/textAppearanceSubtitle2"
+            android:textColor="@color/md_theme_dark_primary"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/obfuscationGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <RadioButton
+                android:id="@+id/radioLow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Low"
+                android:textSize="12sp"/>
+
+            <RadioButton
+                android:id="@+id/radioMedium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Medium"
+                android:checked="true"
+                android:textSize="12sp"/>
+
+            <RadioButton
+                android:id="@+id/radioHigh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="High"
+                android:textSize="12sp"/>
+        </RadioGroup>
+
+        <!-- Location Selection -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select Location (optional)"
             android:textAppearance="?attr/textAppearanceSubtitle2"
+            android:textColor="@color/md_theme_dark_primary"
             android:layout_marginBottom="8dp"/>
 
         <Spinner
@@ -39,14 +84,16 @@
             android:layout_height="48dp"
             android:layout_marginBottom="24dp"/>
 
+        <!-- Generate Button -->
         <Button
             android:id="@+id/generateButton"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Generate WARP Config"
+            android:text="Generate Amnezia WARP"
             android:textAllCaps="false"
             style="@style/Widget.Material3.Button.ElevatedButton"/>
 
+        <!-- Progress Bar -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="48dp"
@@ -54,6 +101,16 @@
             android:layout_gravity="center"
             android:visibility="gone"
             android:layout_marginTop="24dp"/>
+
+        <!-- Status Text -->
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/md_theme_dark_onSurfaceVariant"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
