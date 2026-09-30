@@ -1,6 +1,7 @@
 /*
- * Copyright © 2017-2025 WireGuard LLC. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0
+ * n!port WG - Modern VPN client with WARP & VLESS support
+ * Copyright © 2026 n!port. All Rights Reserved.
+ * SPDX-License-Identifier: MIT
  */
 package com.wireguard.android.activity
 
@@ -19,6 +20,7 @@ import com.wireguard.android.R
 import com.wireguard.android.fragment.TunnelDetailFragment
 import com.wireguard.android.fragment.TunnelEditorFragment
 import com.wireguard.android.model.ObservableTunnel
+import com.nport.wg.warp.WarpGeneratorDialogFragment
 
 /**
  * CRUD interface for WireGuard tunnels. This activity serves as the main entry point to the
@@ -88,6 +90,13 @@ class MainActivity : BaseActivity(), FragmentManager.OnBackStackChangedListener 
             }
             // This menu item is handled by the editor fragment.
             R.id.menu_action_save -> false
+            
+            R.id.menu_warp_generator -> {
+                val dialog = WarpGeneratorDialogFragment()
+                dialog.show(supportFragmentManager, "WarpGeneratorDialog")
+                true
+            }
+            
             R.id.menu_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 true
