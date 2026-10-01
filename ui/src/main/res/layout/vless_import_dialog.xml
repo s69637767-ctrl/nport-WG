@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Import VLESS Configuration"
+            android:text="@string/vless_import_title"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textColor="@color/md_theme_dark_primary"
             android:layout_marginBottom="8dp"/>
@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Import from URI, QR code, or subscription"
+            android:text="@string/vless_import_from_url"
             android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="@color/md_theme_dark_onSurfaceVariant"
             android:layout_marginBottom="24dp"/>
@@ -66,7 +66,7 @@
                 android:id="@+id/scanQrButton"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="Scan QR Code"
+                android:text="@string/create_from_qr_code"
                 android:textAllCaps="false"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_marginBottom="12dp"/>
@@ -75,7 +75,7 @@
                 android:id="@+id/importUriButton"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="Import from URI"
+                android:text="@string/vless_import_from_url"
                 android:textAllCaps="false"
                 style="@style/Widget.Material3.Button.ElevatedButton"/>
 
@@ -93,7 +93,7 @@
                 android:id="@+id/subscriptionUrlInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="https://example.com/sub"
+                android:hint="@string/vless_subscription_url"
                 android:inputType="textUri"
                 android:layout_marginBottom="12dp"/>
 
@@ -101,7 +101,7 @@
                 android:id="@+id/importSubscriptionButton"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="Import Subscription"
+                android:text="@string/vless_import_from_url"
                 android:textAllCaps="false"
                 style="@style/Widget.Material3.Button.ElevatedButton"/>
 

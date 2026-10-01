@@ -71,4 +71,8 @@
     <color name="md_theme_dark_surfaceTint">#34D0B6</color>
     <color name="md_theme_dark_outlineVariant">#3F4945</color>
     <color name="md_theme_dark_scrim">#000000</color>
+
+    <!-- Additional colors for Amnezia WARP and VLESS -->
+    <color name="primary_color">#00A287</color>
+    <color name="accent_color">#34D0B6</color>
 </resources>
