@@ -44,9 +44,9 @@ class WarpGeneratorDialogFragment : DialogFragment() {
     private fun setupObfuscationRadioGroup() {
         binding.obfuscationGroup.setOnCheckedChangeListener { _, checkedId ->
             val level = when (checkedId) {
-                R.id.radioLow -> ObfuscationLevel.LOW
-                R.id.radioMedium -> ObfuscationLevel.MEDIUM
-                R.id.radioHigh -> ObfuscationLevel.HIGH
+                R.id.obfuscationLow -> ObfuscationLevel.LOW
+                R.id.obfuscationMedium -> ObfuscationLevel.MEDIUM
+                R.id.obfuscationHigh -> ObfuscationLevel.HIGH
                 else -> ObfuscationLevel.MEDIUM
             }
             viewModel.setObfuscationLevel(level)
