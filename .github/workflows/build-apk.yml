@@ -39,6 +39,7 @@ jobs:
 
     - name: Generate keystores
       run: |
+        rm -f ui/debug.keystore ui/release.keystore
         keytool -genkeypair -v \
           -keystore ui/debug.keystore \
           -storepass android -keypass android \
