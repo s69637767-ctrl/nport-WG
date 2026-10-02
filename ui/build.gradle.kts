@@ -27,11 +27,26 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
         isCoreLibraryDesugaringEnabled = true
     }
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+        create("release") {
+            storeFile = file("release.keystore")
+            storePassword = "nportwg"
+            keyAlias = "nportwg"
+            keyPassword = "nportwg"
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles("proguard-android-optimize.txt")
+            signingConfig = signingConfigs.getByName("release")
             packaging {
                 resources {
                     excludes += "DebugProbesKt.bin"
