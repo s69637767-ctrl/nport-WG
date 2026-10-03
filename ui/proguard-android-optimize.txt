@@ -3,6 +3,10 @@
 -dontobfuscate
 -verbose
 
+# Ignore missing androidx.window optional dependencies
+-dontwarn androidx.window.extensions.**
+-dontwarn androidx.window.sidecar.**
+
 -keepattributes *Annotation*
 
 -keepclasseswithmembernames class * {
