@@ -1,5 +1,6 @@
 package com.nport.wg.warp
 
+import android.util.Log
 import com.nport.wg.models.WarpAccount
 import com.nport.wg.models.WarpConfig
 import com.nport.wg.models.WarpLocation
@@ -9,6 +10,7 @@ import org.json.JSONObject
 import java.net.URL
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
+import java.io.IOException
 
 /**
  * Cloudflare WARP API client
@@ -17,10 +19,13 @@ import javax.net.ssl.HttpsURLConnection
 class WarpApiClient {
 
     companion object {
+        private const val TAG = "WarpApiClient"
         private const val API_BASE = "https://api.cloudflareclient.com"
         private const val API_VERSION = "v0a2322" // API version (changes over time)
         private const val USER_AGENT = "okhttp/3.12.1"
-        
+        private const val CONNECT_TIMEOUT = 15000 // 15 seconds
+        private const val READ_TIMEOUT = 15000 // 15 seconds
+
         // WARP endpoints
         private val WARP_ENDPOINTS = listOf(
             "engage.cloudflareclient.com:2408",
@@ -37,13 +42,18 @@ class WarpApiClient {
      * Register a new WARP device
      */
     suspend fun registerDevice(keyPair: WarpKeyGenerator.KeyPair): Result<WarpAccount> = withContext(Dispatchers.IO) {
+        var connection: HttpsURLConnection? = null
         try {
+            Log.d(TAG, "Registering device with public key: ${keyPair.publicKey.take(10)}...")
+
             val url = URL("$API_BASE/$API_VERSION/reg")
-            val connection = url.openConnection() as HttpsURLConnection
-            
+            connection = url.openConnection() as HttpsURLConnection
+
             connection.requestMethod = "POST"
             connection.setRequestProperty("User-Agent", USER_AGENT)
             connection.setRequestProperty("Content-Type", "application/json")
+            connection.connectTimeout = CONNECT_TIMEOUT
+            connection.readTimeout = READ_TIMEOUT
             connection.doOutput = true
 
             val jsonBody = JSONObject().apply {
@@ -55,12 +65,23 @@ class WarpApiClient {
                 put("locale", "en_US")
             }
 
+            Log.d(TAG, "Sending registration request...")
             connection.outputStream.use { os ->
                 os.write(jsonBody.toString().toByteArray(Charsets.UTF_8))
             }
 
+            val responseCode = connection.responseCode
+            Log.d(TAG, "Response code: $responseCode")
+
+            if (responseCode != 200 && responseCode != 201) {
+                val errorStream = connection.errorStream?.bufferedReader()?.readText() ?: "Unknown error"
+                Log.e(TAG, "Registration failed: $errorStream")
+                return@withContext Result.failure(Exception("HTTP $responseCode: $errorStream"))
+            }
+
             val response = connection.inputStream.bufferedReader().readText()
             val json = JSONObject(response)
+            Log.d(TAG, "Registration successful, account ID: ${json.getString("id")}")
 
             val account = WarpAccount(
                 id = json.getString("id"),
@@ -71,7 +92,10 @@ class WarpApiClient {
 
             Result.success(account)
         } catch (e: Exception) {
+            Log.e(TAG, "Registration error", e)
             Result.failure(e)
+        } finally {
+            connection?.disconnect()
         }
     }
 
@@ -79,16 +103,32 @@ class WarpApiClient {
      * Get WARP configuration
      */
     suspend fun getConfig(account: WarpAccount): Result<WarpConfig> = withContext(Dispatchers.IO) {
+        var connection: HttpsURLConnection? = null
         try {
+            Log.d(TAG, "Getting config for account: ${account.id}")
+
             val url = URL("$API_BASE/$API_VERSION/reg/${account.id}")
-            val connection = url.openConnection() as HttpsURLConnection
-            
+            connection = url.openConnection() as HttpsURLConnection
+
             connection.requestMethod = "GET"
             connection.setRequestProperty("User-Agent", USER_AGENT)
             connection.setRequestProperty("Authorization", "Bearer ${account.token}")
+            connection.connectTimeout = CONNECT_TIMEOUT
+            connection.readTimeout = READ_TIMEOUT
+
+            Log.d(TAG, "Fetching config...")
+            val responseCode = connection.responseCode
+            Log.d(TAG, "Response code: $responseCode")
+
+            if (responseCode != 200) {
+                val errorStream = connection.errorStream?.bufferedReader()?.readText() ?: "Unknown error"
+                Log.e(TAG, "Get config failed: $errorStream")
+                return@withContext Result.failure(Exception("HTTP $responseCode: $errorStream"))
+            }
 
             val response = connection.inputStream.bufferedReader().readText()
             val json = JSONObject(response)
+            Log.d(TAG, "Config received successfully")
 
             val config = WarpConfig(
                 privateKey = account.privateKey,
@@ -97,15 +137,18 @@ class WarpApiClient {
                     .getString("public_key"),
                 endpoint = WARP_ENDPOINTS.random(),
                 clientIp = json.getJSONObject("config").getJSONObject("interface")
-                    .getString("addresses").let { 
-                        JSONObject(it).getJSONArray("v4").getString(0) 
+                    .getString("addresses").let {
+                        JSONObject(it).getJSONArray("v4").getString(0)
                     },
                 reserved = extractReserved(json)
             )
 
             Result.success(config)
         } catch (e: Exception) {
+            Log.e(TAG, "Get config error", e)
             Result.failure(e)
+        } finally {
+            connection?.disconnect()
         }
     }
 
